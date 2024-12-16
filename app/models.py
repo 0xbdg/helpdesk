@@ -1,9 +1,20 @@
-from app import db
+from app import *
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, unique=True,primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+
+    def is_active(self):
+       return True
+    
+class Admin(db.Model, UserMixin):
+    id = db.Column(db.Integer, unique=True,primary_key=True)
+    username = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+    def is_active(self):
+       return True
 
 class Tickets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
