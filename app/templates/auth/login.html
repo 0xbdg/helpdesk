@@ -1,6 +1,6 @@
 {% extends "client/base.html" %}
 
-{% block title %}Helpdesk Login{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block contents %}
 <div class="bg-light py-3 py-md-5">
@@ -11,11 +11,11 @@
             <div class="row">
               <div class="col-12">
                 <div class="mb-5">
-                  <h3>User Log in</h3>
+                  <h3>Log in</h3>
                 </div>
               </div>
             </div>
-            <form action="{{ url_for("userlogin")}}" method="POST">
+            <form action="{{ url_for("login")}}" method="POST">
               <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" />  
               <div class="row gy-3 gy-md-4 overflow-hidden">
                 <div class="col-12">

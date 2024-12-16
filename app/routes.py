@@ -9,29 +9,18 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route("/", methods=["POST","GET"])
-def userlogin():
-    form = UserLoginForm()
+def login():
+    form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             login_user(user)
             return redirect("/helpdesk")
-    return render_template("client/pages/login.html", form=form)
-
-@app.route("/admin/", methods=["POST","GET"])
-@login_required
-def adminlogin():
-    form = AdminLoginForm()
-
-    if form.validate_on_submit():
-        user = Admin.query.filter_by(username=form.username.data).first()
-        if user:
-            login_user(user)
-            return redirect("/admin/dashboard/")
-    return render_template("admin/pages/login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 @app.route("/admin/dashboard/")
+@login_required
 def dashboard():
     return render_template("admin/pages/index.html")
 

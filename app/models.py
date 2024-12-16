@@ -4,14 +4,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, unique=True,primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-
-    def is_active(self):
-       return True
-    
-class Admin(db.Model, UserMixin):
-    id = db.Column(db.Integer, unique=True,primary_key=True)
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
     def is_active(self):
        return True
