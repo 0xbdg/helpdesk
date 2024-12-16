@@ -20,6 +20,7 @@ def userlogin():
     return render_template("client/pages/login.html", form=form)
 
 @app.route("/admin/", methods=["POST","GET"])
+@login_required
 def adminlogin():
     form = AdminLoginForm()
 
