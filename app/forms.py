@@ -1,10 +1,32 @@
-from app import *
-from wtforms import StringField, PasswordField, SubmitField
-from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length, ValidationError
+from django import forms
+from django.forms.widgets import *
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.models import User
 
-class LoginForm(FlaskForm):
-    username= StringField(validators=[InputRequired(), Length(min=1, max=255)], render_kw={"class":"form-control", "placeholder":"Enter username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=1, max=255)], render_kw={"class":"form-control", "placeholder":"Enter password"})
+class ProblemForm(forms.Form):
+    title = forms.CharField(required=True, widget=TextInput(attrs={"class":"form-control"}))
+    description = forms.CharField(required=True, widget=Textarea(attrs={"class":"form-control"}))
+    date = forms.DateField(widget=DateInput(attrs={"class":"form-control", "type":"date"}))
 
-    submit = SubmitField("Log in", render_kw={"class":"btn btn-lg btn-primary"})
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(required=True, widget=TextInput(attrs={"class":"form-control"}))
+    password = forms.CharField(required=True, widget=PasswordInput(attrs={"class":"form-control"}))
+
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=PasswordInput(attrs={"class":"form-control"}))
+    new_password1 = forms.CharField(widget=PasswordInput(attrs={"class":"form-control"}))
+    new_password2 = forms.CharField(widget=PasswordInput(attrs={"class":"form-control"}))
+
+class UpdateProfile(UserChangeForm):
+    first_name = forms.CharField(required=True, widget=TextInput(attrs={"class":"form-control"}))
+    last_name = forms.CharField(required=True, widget=TextInput(attrs={"class":"form-control"}))
+    username = forms.CharField(required=True, widget=TextInput(attrs={"class":"form-control"}))
+    email = forms.EmailField(required=True, widget=EmailInput(attrs={"class":"form-control"}))
+
+    class Meta:
+        model = User
+        fields = ["username", "first_name","last_name","email"]

@@ -1,11 +1,12 @@
-{% extends "client/base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}Report{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block navbar %}{% include "components/navbar.html" %}{% endblock %}
 
 {% block contents %}
-<h1>All Tickets</h1>
+<h1>Your Tickets</h1>
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Create Ticket
 </button>
@@ -16,23 +17,20 @@
           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Ticket</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form method="POST" action="{{ url_for('index')}}">
+        <form method="POST" action="{% url 'index'%}">
+            {% csrf_token %}
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Your name</label>
-                    <input type="text" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Enter name">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Your email</label>
-                    <input type="email" class="form-control" name="email" id="exampleFormControlInput1" placeholder="example@mail.com">
-                </div>
-                <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Problem title</label>
-                    <input type="text" class="form-control" name="title" id="exampleFormControlInput1" placeholder="Problem">
+                    {{ form.title}}
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Problem desc</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" name="desc" rows="5"></textarea>
+                    {{ form.description}}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Date</label>
+                    {{ form.date}}
                 </div>
             </div>
             <div class="modal-footer">
@@ -43,7 +41,8 @@
       </div>
     </div>
 </div>
-  
+<hr>
+<h3>Your reports</h3>
 <table class="table">
     <thead>
       <tr>
@@ -56,13 +55,15 @@
     </thead>
     <tbody>
     {% for ticket in tickets %}
+    {% if ticket.client == user %}
       <tr>
-        <th scope="row">{{ loop.index}}</th>
-        <td>{{ ticket.title}}</td>
+        <th scope="row">{{ forloop.counter}}</th>
+        <td>{{ ticket.problem}}</td>
         <td>{{ ticket.description}}</td>
         <td>{{ ticket.status}}</td>
-        <td>{{ ticket.datetime}}</td>
+        <td>{{ ticket.date}}</td>
       </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
 </table>

@@ -1,19 +1,19 @@
-from app import *
+from django.db import models
+from django.contrib.auth.models import User
+# Create your models here.
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, unique=True,primary_key=True)
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+class Ticket(models.Model):
+    STATUS = (
+        ("unsolved", "unsolved"),
+        ("solved", "solved"),
+        ("process","process")
+    )
 
-    def is_active(self):
-       return True
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
+    status = models.CharField(max_length=255, choices=STATUS)
+    date = models.DateField(null=False)
 
-class Tickets(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    client = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True,nullable=False)
-    title = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(255))
-    datetime = db.Column(db.DateTime)
+    class Meta:
+        verbose_name_plural = "Ticket"
